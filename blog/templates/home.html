@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<style>
+@font-face { font-family: 'yg-jalnan'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff'); font-weight: normal; font-style: normal; }
+body{
+    background-color:#FBF5EF;
+}
+
+h1{
+    text-align:center;
+    font-family: 'yg-jalnan';
+}
+.jumbotron{
+    background-color:#F5DA81;
+}
+a{
+    margin:10px;
+}
+#text{
+    border:1px solid #3B240B;
+    border-radius:10px;
+    width:96%;
+
+    height:200px;
+    margin:10px;
+    
+
+}
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href={% url 'home' %}>Mainpage</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="{% url 'write'%}">글쓰기 <span class="sr-only">글쓰기</span></a></li>
+        <li class="dropdown">
+        <li class="active"><a href="{% url 'signup'%}">회원가입 <span class="sr-only"></span></a></li>
+        {% if user.is_authenticated %}
+          <li class="active"><a href="{% url 'logout' %}">Logout <span class="sr-only"></span></a></li>
+        {% else %}
+        <li class="active"><a href="{% url 'login'%}">로그인 <span class="sr-only"></span></a></li>
+        {% endif %}
+  <form class="navbar-form navbar-left" role="search">
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="jumbotron" >
+<h1> blog </h1>
+</div>
+<a href="{% url 'write'%}">글쓰기</a>
+<p style="float:right">환영합니다. {{user.username}} 님!</p>
+
+
+{% for val in posts %}
+<container>
+<div id="text">
+    <h2>제목:{{val.title}}</h2>
+    <p>내용:{{val.content}}</p>
+    <a href="{% url 'updatemodify' val.id%}">수정</a>
+    <a href="{% url 'delete' val.id %}">삭제</a>
+</div>
+
+</container>
+{% endfor%}
+ <div class="container">
+{% if posts.has_previous%}
+<a href="?page=1">First</a>
+<a href="?page={{posts.previous_page_number}}">Previous</a>
+{% endif%}
+
+<span>{{posts.number}}</span>
+<span>of</span>
+<span>{{posts.paginator.num_pages}}</span>
+
+{% if posts.has_next %}
+<a href="?page={{posts.next_page_number}}">Next</a>
+<a href="?page={{posts.paginator.num_pages}}">Last</a>
+{% endif%}
+</div>
+
+
+</body>
+</html>
